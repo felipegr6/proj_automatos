@@ -1,8 +1,4 @@
-%{
-	#include <stdio.h>
-  #include "myshell.tab.h"
-%}
-%option noyywrap
+
 %%
 [ \t]         ;
 [0-9]+        yylval = atoi(yytext);  return NUM;

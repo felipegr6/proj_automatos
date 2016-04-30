@@ -17,25 +17,21 @@ void yyerror(char *);
 %token IFCONFIG
 %token START
 %token QUIT
-
 %start linha
 %%
-linha: expressao FIM_LINHA { printf("valor: %d\n", $1); }
-		;
-expressao: expressao '+' termo { $$ = $1 + $3; }
-		| termo                { $$ = $1; }
-		;
-termo: NUM                 { $$ = $1; }
+linha: FIM_LINHA {  }
 		;
 %%
+
+#include "lex.yy.c"
+
 int main(int argc, char **argv)
 {
-    // return yyparse();
-    return 1;
+  return yyparse();
 }
- 
-/* função usada pelo bison para dar mensagens de erro */
+
+/* funcao usada pelo bison para dar mensagens de erro */
 void yyerror(char *msg)
 {
-    fprintf(stderr, "Erro: %s\n", msg);
+  fprintf(stderr, "Error: %s\n", msg);
 }
