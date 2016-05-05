@@ -3,6 +3,9 @@
 #include <stdlib.h>
 void yyerror(char *);
 void foo();
+void ls();
+void ps();
+void ifconfig();
 %}
 
 %token END_LINE
@@ -28,18 +31,18 @@ command:
             | command command
 		    ;
 action:
-          exp { printf("exp\n"); }
-        | ops { printf("%d\n", $1); }
+          exp
+        | ops
         ;
 exp:
-          LS { printf("ls"); }
-        | PS { foo(); }
+          LS { ls(); }
+        | PS { ps(); }
         | KILL NUMBER { foo(); }
         | MKDIR ID { foo(); }
         | RMDIR ID { foo(); }
         | CD ID { foo(); }
         | TOUCH ID { foo(); }
-        | IFCONFIG { foo(); }
+        | IFCONFIG { ifconfig(); }
         | START ID { foo(); }
         | QUIT { foo(); }
         ;
@@ -72,4 +75,16 @@ void yyerror(char *msg)
 void foo()
 {
 
+}
+
+void ls() {
+    system("which ls | sh");
+}
+
+void ps() {
+    system("which ps | sh");
+}
+
+void ifconfig() {
+    system("which ifconfig | sh");
 }
