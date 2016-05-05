@@ -1,7 +1,5 @@
 
 %%
-[0-9]+                yylval = atoi(yytext);  return NUMBER;
-[a-zA-Z][a-zA-Z0-9]+  return ID;
 "+"                   return '+';
 "-"                   return '-';
 "*"                   return '*';
@@ -16,6 +14,8 @@
 "ifconfig"            return IFCONFIG;
 "start"               return START;
 "quit"                return QUIT;
+[0-9]+                yylval = atoi(yytext);  return NUMBER;
+[a-zA-Z][a-zA-Z0-9]+  return ID;
 [ \t]                 ;
 "\n"                  return END_LINE;
 .                     return ERROR;

@@ -28,11 +28,11 @@ command:
             | command command
 		    ;
 action:
-          exp
+          exp { printf("exp\n"); }
         | ops { printf("%d\n", $1); }
         ;
 exp:
-          LS { foo(); }
+          LS { printf("ls"); }
         | PS { foo(); }
         | KILL NUMBER { foo(); }
         | MKDIR ID { foo(); }
