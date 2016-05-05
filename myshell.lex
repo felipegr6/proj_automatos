@@ -18,4 +18,5 @@
 "quit"                return QUIT;
 [ \t]                 ;
 "\n"                  return END_LINE;
+.                     return ERROR;
 %%

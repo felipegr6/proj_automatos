@@ -18,14 +18,18 @@ void foo();
 %token IFCONFIG
 %token START
 %token QUIT
+%token ERROR
 %start command
 %%
 command:
-          action END_LINE
+            action END_LINE { printf(">> "); }
+            | END_LINE { printf(">> "); }
+            | ERROR { printf("Comando Desconhecido.\n"); }
+            | command command
 		    ;
 action:
           exp
-        | ops
+        | ops { printf("%d\n", $1); }
         ;
 exp:
           LS { foo(); }
@@ -55,7 +59,8 @@ term:
 
 int main(int argc, char **argv)
 {
-  return yyparse();
+    printf(">> ");
+    return yyparse();
 }
 
 /* function to send error messages */
