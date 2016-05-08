@@ -1,0 +1,4 @@
+*.out
+lex.yy.c
+myshell.tab.c
+myshell.tab.h
