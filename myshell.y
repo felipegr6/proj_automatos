@@ -8,6 +8,9 @@ void ls();
 void ps();
 void ifconfig();
 void touch(char *);
+void kill(int number);
+void makeDir(char *);
+void removeDir(char *);
 void quit();
 %}
 
@@ -47,9 +50,9 @@ exp:
         | IFCONFIG { ifconfig(); }
         | QUIT { quit(); }
         | TOUCH ID { touch($2); }
-        | KILL NUMBER { foo(); }
-        | MKDIR ID { foo(); }
-        | RMDIR ID { foo(); }
+        | KILL NUMBER { kill($2); }
+        | MKDIR ID { makeDir($2); }
+        | RMDIR ID { removeDir($2); }
         | CD ID { foo(); }
         | START ID { foo(); }
         ;
@@ -96,7 +99,25 @@ void ifconfig() {
 
 void touch(char *id) {
   char result[256];
-  sprintf(result, "%s%s","touch ", id);
+  sprintf(result, "%s %s","touch", id);
+  system(result);
+}
+
+void kill(int number) {
+  char result[256];
+  sprintf(result, "%s %d", "kill", number);
+  system(result);
+}
+
+void makeDir(char *id) {
+  char result[256];
+  sprintf(result, "%s %s", "mkdir", id);
+  system(result);
+}
+
+void removeDir(char *id) {
+  char result[256];
+  sprintf(result, "%s %s", "rm -r", id);
   system(result);
 }
 
