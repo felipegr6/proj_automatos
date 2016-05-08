@@ -11,6 +11,7 @@ void touch(char *);
 void kill(int number);
 void makeDir(char *);
 void removeDir(char *);
+void startProcess(char *);
 void quit();
 %}
 
@@ -53,8 +54,8 @@ exp:
         | KILL NUMBER { kill($2); }
         | MKDIR ID { makeDir($2); }
         | RMDIR ID { removeDir($2); }
+        | START ID { startProcess($2); }
         | CD ID { foo(); }
-        | START ID { foo(); }
         ;
 ops:
           NUMBER { $$ = $1; }
@@ -119,6 +120,10 @@ void removeDir(char *id) {
   char result[256];
   sprintf(result, "%s %s", "rm -r", id);
   system(result);
+}
+
+void startProcess(char *id) {
+  system(id);
 }
 
 void quit() {
