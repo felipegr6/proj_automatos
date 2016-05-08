@@ -1,11 +1,14 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 void yyerror(char *);
 void foo();
 void ls();
 void ps();
 void ifconfig();
+void touch(char *);
+void quit();
 %}
 
 %token END_LINE
@@ -25,10 +28,10 @@ void ifconfig();
 %start command
 %%
 command:
-            action END_LINE { printf(">> "); }
-            | END_LINE { printf(">> "); }
-            | ERROR { printf("Comando Desconhecido.\n"); }
-            | command command
+          action END_LINE { printf(">> "); }
+        | END_LINE { printf(">> "); }
+        | ERROR { printf("Comando Desconhecido.\n"); }
+        | command command
 		    ;
 action:
           exp
@@ -37,20 +40,20 @@ action:
 exp:
           LS { ls(); }
         | PS { ps(); }
+        | IFCONFIG { ifconfig(); }
         | KILL NUMBER { foo(); }
+        | TOUCH ID { touch($2); }
         | MKDIR ID { foo(); }
         | RMDIR ID { foo(); }
         | CD ID { foo(); }
-        | TOUCH ID { foo(); }
-        | IFCONFIG { ifconfig(); }
         | START ID { foo(); }
-        | QUIT { foo(); }
+        | QUIT { quit(); }
         ;
 ops:
-          ops '+' term { $$ = $1 + $3; }
-        | ops '-' term { $$ = $1 - $3; }
-        | ops '*' term { $$ = $1 * $3; }
+          ops '*' term { $$ = $1 * $3; }
         | ops '/' term { $$ = $1 / $3; }
+        | ops '+' term { $$ = $1 + $3; }
+        | ops '-' term { $$ = $1 - $3; }
         | term { $$ = $1; }
         ;
 term:
@@ -78,13 +81,21 @@ void foo()
 }
 
 void ls() {
-    system("which ls | sh");
+    system("ls");
 }
 
 void ps() {
-    system("which ps | sh");
+    system("ps");
 }
 
 void ifconfig() {
-    system("which ifconfig | sh");
+    system("ifconfig");
+}
+
+void touch(char *id) {
+  system(strcat("touch ", id));
+}
+
+void quit() {
+  exit(0);
 }

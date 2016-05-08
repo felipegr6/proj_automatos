@@ -15,7 +15,7 @@
 "start"               return START;
 "quit"                return QUIT;
 [0-9]+                yylval = atoi(yytext);  return NUMBER;
-[a-zA-Z][a-zA-Z0-9]+  return ID;
+[a-zA-Z][a-zA-Z0-9]*  return ID;
 [ \t]                 ;
 "\n"                  return END_LINE;
 .                     return ERROR;
