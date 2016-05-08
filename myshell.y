@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 void yyerror(char *);
 void foo();
@@ -12,12 +13,14 @@ void kill(int number);
 void makeDir(char *);
 void removeDir(char *);
 void startProcess(char *);
+void cd(char *);
 void quit();
 %}
 
 %token END_LINE
 %token NUMBER
 %token PLUS MINUS MULTIPLY DIVIDE
+%token BACK
 %token ID
 %token LS
 %token PS
@@ -42,7 +45,7 @@ command:
         | command command
 		    ;
 action:
-          exp { printf("exp\n"); }
+          exp
         | ops { printf("%d\n", $1); }
         ;
 exp:
@@ -55,7 +58,8 @@ exp:
         | MKDIR ID { makeDir($2); }
         | RMDIR ID { removeDir($2); }
         | START ID { startProcess($2); }
-        | CD ID { foo(); }
+        | CD ID { cd($2); }
+        | CD BACK { cd($2); }
         ;
 ops:
           NUMBER { $$ = $1; }
@@ -124,6 +128,23 @@ void removeDir(char *id) {
 
 void startProcess(char *id) {
   system(id);
+}
+
+void cd(char *id) {
+
+  char currentDir[1024];
+  char result[2048];
+
+  if (getcwd(currentDir, sizeof(currentDir)) == NULL) {
+    perror("Error in cd() getcwd()");
+  }
+
+  sprintf(result, "%s/%s", currentDir, id);
+
+  if(chdir(result) != 0) {
+    fprintf(stderr, "Error in cd() chdir()\n");
+  }
+
 }
 
 void quit() {
