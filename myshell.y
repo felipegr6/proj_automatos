@@ -4,7 +4,6 @@
 #include <unistd.h>
 
 void yyerror(char *);
-void foo();
 void ls();
 void ps();
 void ifconfig();
@@ -14,6 +13,7 @@ void makeDir(char *);
 void removeDir(char *);
 void startProcess(char *);
 void cd(char *);
+char* currentDir();
 void quit();
 %}
 
@@ -39,9 +39,9 @@ void quit();
 %start command
 %%
 command:
-          action END_LINE { printf(">> "); }
-        | END_LINE { printf(">> "); }
-        | ERROR { printf("Comando Desconhecido.\n"); }
+          action END_LINE { printf("myshell:%s>> ", currentDir()); }
+        | END_LINE { printf("myshell:%s>> ", currentDir()); }
+        | ERROR { printf("Unknow command.\n"); }
         | command command
 		    ;
 action:
@@ -75,7 +75,8 @@ ops:
 
 int main(int argc, char **argv)
 {
-    printf(">> ");
+    printf("myshell:%s>> ", currentDir());
+    // printf(">> ");
     return yyparse();
 }
 
@@ -83,11 +84,6 @@ int main(int argc, char **argv)
 void yyerror(char *msg)
 {
   fprintf(stderr, "Error: %s\n", msg);
-}
-
-void foo()
-{
-
 }
 
 void ls() {
@@ -144,6 +140,15 @@ void cd(char *id) {
   if(chdir(result) != 0) {
     fprintf(stderr, "Error in cd() chdir()\n");
   }
+
+}
+
+char* currentDir() {
+
+  char currentDir[1024];
+  getcwd(currentDir, sizeof(currentDir));
+
+  return currentDir;
 
 }
 
