@@ -10,7 +10,7 @@
 "ifconfig"            return IFCONFIG;
 "start"               return START;
 "quit"                return QUIT;
-[a-zA-Z][a-zA-Z_0-9]* return ID;
+[a-zA-Z][a-zA-Z_0-9]* yylval = yytext; return ID;
 [0-9]+                yylval = atoi(yytext);  return NUMBER;
 "+"                   return PLUS;
 "-"		                return MINUS;

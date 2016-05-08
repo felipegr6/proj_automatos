@@ -46,8 +46,8 @@ exp:
         | PS { ps(); }
         | IFCONFIG { ifconfig(); }
         | QUIT { quit(); }
+        | TOUCH ID { touch($2); }
         | KILL NUMBER { foo(); }
-        | TOUCH ID { printf($2); }
         | MKDIR ID { foo(); }
         | RMDIR ID { foo(); }
         | CD ID { foo(); }
@@ -95,8 +95,9 @@ void ifconfig() {
 }
 
 void touch(char *id) {
-  char resultado[256];
-  sprintf(resultado, "%s%s","touch ", "2");
+  char result[256];
+  sprintf(result, "%s%s","touch ", id);
+  system(result);
 }
 
 void quit() {
