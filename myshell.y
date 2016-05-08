@@ -13,8 +13,9 @@ void makeDir(char *);
 void removeDir(char *);
 void startProcess(char *);
 void cd(char *);
-char* currentDir();
+void currentDir();
 void quit();
+void unknowCommand();
 %}
 
 %token END_LINE
@@ -39,9 +40,9 @@ void quit();
 %start command
 %%
 command:
-          action END_LINE { printf("myshell:%s>> ", currentDir()); }
-        | END_LINE { printf("myshell:%s>> ", currentDir()); }
-        | ERROR { printf("Unknow command.\n"); }
+          action END_LINE { currentDir(); }
+        | END_LINE { currentDir(); }
+        | ERROR { unknowCommand(); }
         | command command
 		    ;
 action:
@@ -60,6 +61,7 @@ exp:
         | START ID { startProcess($2); }
         | CD ID { cd($2); }
         | CD BACK { cd($2); }
+        | ID { unknowCommand(); }
         ;
 ops:
           NUMBER { $$ = $1; }
@@ -73,11 +75,12 @@ ops:
 
 #include "lex.yy.c"
 
-int main(int argc, char **argv)
-{
-    printf("myshell:%s>> ", currentDir());
-    // printf(">> ");
+int main(int argc, char **argv) {
+
+    currentDir();
+
     return yyparse();
+
 }
 
 /* function to send error messages */
@@ -143,13 +146,17 @@ void cd(char *id) {
 
 }
 
-char* currentDir() {
+void currentDir() {
 
   char currentDir[1024];
   getcwd(currentDir, sizeof(currentDir));
 
-  return currentDir;
+  printf("myshell:%s>> ", currentDir);
 
+}
+
+void unknowCommand() {
+  printf("Unknow command.\n");
 }
 
 void quit() {
