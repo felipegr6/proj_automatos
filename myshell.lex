@@ -1,9 +1,5 @@
 
 %%
-"+"                   return '+';
-"-"                   return '-';
-"*"                   return '*';
-"/"                   return '/';
 "ls"                  return LS;
 "ps"                  return PS;
 "kill"                return KILL;
@@ -14,8 +10,12 @@
 "ifconfig"            return IFCONFIG;
 "start"               return START;
 "quit"                return QUIT;
+[a-zA-Z][a-zA-Z_0-9]* return ID;
 [0-9]+                yylval = atoi(yytext);  return NUMBER;
-[a-zA-Z][a-zA-Z0-9]*  return ID;
+"+"                   return PLUS;
+"-"		                return MINUS;
+"*"                   return MULTIPLY;
+"/"                   return DIVIDE;
 [ \t]                 ;
 "\n"                  return END_LINE;
 .                     return ERROR;

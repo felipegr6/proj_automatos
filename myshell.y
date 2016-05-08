@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 void yyerror(char *);
 void foo();
 void ls();
@@ -13,6 +13,7 @@ void quit();
 
 %token END_LINE
 %token NUMBER
+%token PLUS MINUS MULTIPLY DIVIDE
 %token ID
 %token LS
 %token PS
@@ -25,6 +26,9 @@ void quit();
 %token START
 %token QUIT
 %token ERROR
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
+
 %start command
 %%
 command:
@@ -34,31 +38,29 @@ command:
         | command command
 		    ;
 action:
-          exp
-        | ops
+          exp { printf("exp\n"); }
+        | ops { printf("%d\n", $1); }
         ;
 exp:
           LS { ls(); }
         | PS { ps(); }
         | IFCONFIG { ifconfig(); }
+        | QUIT { quit(); }
         | KILL NUMBER { foo(); }
-        | TOUCH ID { touch($2); }
+        | TOUCH ID { printf($2); }
         | MKDIR ID { foo(); }
         | RMDIR ID { foo(); }
         | CD ID { foo(); }
         | START ID { foo(); }
-        | QUIT { quit(); }
         ;
 ops:
-          ops '*' term { $$ = $1 * $3; }
-        | ops '/' term { $$ = $1 / $3; }
-        | ops '+' term { $$ = $1 + $3; }
-        | ops '-' term { $$ = $1 - $3; }
-        | term { $$ = $1; }
-        ;
-term:
           NUMBER { $$ = $1; }
+        | ops PLUS ops { $$ = $1 + $3; }
+        | ops MINUS ops { $$ = $1 - $3; }
+        | ops MULTIPLY ops { $$ = $1 * $3; }
+        | ops DIVIDE ops { $$ = $1 / $3; }
         ;
+
 %%
 
 #include "lex.yy.c"
@@ -93,7 +95,8 @@ void ifconfig() {
 }
 
 void touch(char *id) {
-  system(strcat("touch ", id));
+  char resultado[256];
+  sprintf(resultado, "%s%s","touch ", "2");
 }
 
 void quit() {
