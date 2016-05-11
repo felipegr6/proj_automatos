@@ -1,6 +1,9 @@
 # MyShell
 ## Projeto de Linguagens Formais e Autômatos - 1/2016
 
+### Como executar o projeto?
+- `exec`
+
 ### O que entregar
 - Arquivos LEX (.lex)
 - Arquivos BISON (.y)
@@ -10,5 +13,5 @@
     - .java
     - etc.
 
-### Quando entregar
+### Commits válidos até quando
 - 10/05/2016
