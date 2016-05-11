@@ -2,7 +2,7 @@
 ## Projeto de Linguagens Formais e Autômatos - 1/2016
 
 ### Como executar o projeto?
-- `exec`
+- `make`
 
 ### O que entregar
 - Arquivos LEX (.lex)
